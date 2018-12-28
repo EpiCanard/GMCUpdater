@@ -1,0 +1,10 @@
+name: GMCUpdater
+version: 1.0.0
+api-version: 1.13
+author: EpiCanard
+description: Get new items not in config
+main: fr.epicanard.gmcupdater.GMCUpdater
+commands:
+  GMCUpdater:
+    description: List missing bloc in config
+    aliases: [GMCUpdater, gmcu]
