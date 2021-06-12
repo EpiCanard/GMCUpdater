@@ -1,5 +1,7 @@
 # ======================= File categories.yml =======================
 #
+# Version : 1.16
+#
 # This file contains all categories available for global shop
 #
 # Each category is composed of following config variables :
@@ -8,7 +10,7 @@
 # - GroupsLevels => Level of ordering used for this category (There is 3 levels max, see wiki)
 # - Position => The position of the item inside chest (value must be between 0 and 53)
 # - Items => list of items (minecraft key)
-# - IsActive (Optional, default: true) => Define if this category is active or not 
+# - IsActive (Optional, default: true) => Define if this category is active or not
 #       (if false, this category is not used inside shops)
 #
 # /!\ Important :
@@ -296,6 +298,45 @@ Build:
     - minecraft:smooth_sandstone_stairs
     - minecraft:smooth_stone_slab
     - minecraft:stone_stairs
+    - minecraft:ancient_debris
+    - minecraft:basalt
+    - minecraft:blackstone
+    - minecraft:blackstone_slab
+    - minecraft:blackstone_stairs
+    - minecraft:chiseled_nether_bricks
+    - minecraft:chiseled_polished_blackstone
+    - minecraft:cracked_nether_bricks
+    - minecraft:cracked_polished_blackstone_bricks
+    - minecraft:crimson_hyphae
+    - minecraft:crimson_nylium
+    - minecraft:crimson_planks
+    - minecraft:crimson_slab
+    - minecraft:crimson_stairs
+    - minecraft:crimson_stem
+    - minecraft:crying_obsidian
+    - minecraft:gilded_blackstone
+    - minecraft:netherite_block
+    - minecraft:nether_gold_ore
+    - minecraft:polished_basalt
+    - minecraft:polished_blackstone
+    - minecraft:polished_blackstone_bricks
+    - minecraft:polished_blackstone_brick_slab
+    - minecraft:polished_blackstone_brick_stairs
+    - minecraft:polished_blackstone_slab
+    - minecraft:polished_blackstone_stairs
+    - minecraft:quartz_bricks
+    - minecraft:soul_soil
+    - minecraft:stripped_crimson_hyphae
+    - minecraft:stripped_crimson_stem
+    - minecraft:stripped_warped_hyphae
+    - minecraft:stripped_warped_stem
+    - minecraft:warped_hyphae
+    - minecraft:warped_nylium
+    - minecraft:warped_planks
+    - minecraft:warped_slab
+    - minecraft:warped_stairs
+    - minecraft:warped_stem
+    - minecraft:warped_wart_block
 Decoration:
   DisplayName: "Decoration Blocks"
   DisplayItem: minecraft:peony
@@ -540,6 +581,31 @@ Decoration:
     - minecraft:stonecutter
     - minecraft:stone_brick_wall
     - minecraft:wither_rose
+    - minecraft:beehive
+    - minecraft:bee_nest
+    - minecraft:honeycomb_block
+    - minecraft:honey_block
+    - minecraft:blackstone_wall
+    - minecraft:chain
+    - minecraft:crimson_fence
+    - minecraft:crimson_fungus
+    - minecraft:crimson_roots
+    - minecraft:crimson_sign
+    - minecraft:lodestone
+    - minecraft:nether_sprouts
+    - minecraft:polished_blackstone_brick_wall
+    - minecraft:polished_blackstone_wall
+    - minecraft:respawn_anchor
+    - minecraft:shroomlight
+    - minecraft:soul_campfire
+    - minecraft:soul_lantern
+    - minecraft:soul_torch
+    - minecraft:twisting_vines
+    - minecraft:warped_fence
+    - minecraft:warped_fungus
+    - minecraft:warped_roots
+    - minecraft:warped_sign
+    - minecraft:weeping_vines
 Redstone:
   DisplayName: "Redstone"
   DisplayItem: minecraft:redstone
@@ -601,6 +667,19 @@ Redstone:
     - minecraft:trapped_chest
     - minecraft:tripwire_hook
     - minecraft:lectern
+    - minecraft:crimson_button
+    - minecraft:crimson_door
+    - minecraft:crimson_fence_gate
+    - minecraft:crimson_pressure_plate
+    - minecraft:crimson_trapdoor
+    - minecraft:polished_blackstone_button
+    - minecraft:polished_blackstone_pressure_plate
+    - minecraft:target
+    - minecraft:warped_button
+    - minecraft:warped_door
+    - minecraft:warped_fence_gate
+    - minecraft:warped_pressure_plate
+    - minecraft:warped_trapdoor
 Transportation:
   DisplayName: "Transportation"
   DisplayItem: minecraft:powered_rail
@@ -625,6 +704,7 @@ Transportation:
     - minecraft:saddle
     - minecraft:spruce_boat
     - minecraft:tnt_minecart
+    - minecraft:warped_fungus_on_a_stick
 Misc:
   DisplayName: "Miscellaneous"
   DisplayItem: minecraft:lava_bucket
@@ -776,7 +856,6 @@ Misc:
     - minecraft:writable_book
     - minecraft:written_book
     - minecraft:zombie_horse_spawn_egg
-    - minecraft:zombie_pigman_spawn_egg
     - minecraft:zombie_spawn_egg
     - minecraft:zombie_villager_spawn_egg
     - minecraft:bamboo
@@ -801,6 +880,18 @@ Misc:
     - minecraft:wandering_trader_spawn_egg
     - minecraft:white_dye
     - minecraft:yellow_dye
+    - minecraft:bee_spawn_egg
+    - minecraft:honeycomb
+    - minecraft:hoglin_spawn_egg
+    - minecraft:music_disc_pigstep
+    - minecraft:netherite_ingot
+    - minecraft:netherite_scrap
+    - minecraft:piglin_banner_pattern
+    - minecraft:piglin_spawn_egg
+    - minecraft:strider_spawn_egg
+    - minecraft:zoglin_spawn_egg
+    - minecraft:zombified_piglin_spawn_egg
+    - minecraft:piglin_brute_spawn_egg
 Food:
   DisplayName: "Foodstuffs"
   DisplayItem: minecraft:apple
@@ -843,7 +934,9 @@ Food:
     - minecraft:salmon
     - minecraft:spider_eye
     - minecraft:tropical_fish
+    - minecraft:suspicious_stew
     - minecraft:sweet_berries
+    - minecraft:honey_bottle
 Tools:
   DisplayName: "Tools"
   DisplayItem: minecraft:iron_axe
@@ -877,6 +970,10 @@ Tools:
     - minecraft:wooden_hoe
     - minecraft:wooden_pickaxe
     - minecraft:wooden_shovel
+    - minecraft:netherite_axe
+    - minecraft:netherite_hoe
+    - minecraft:netherite_pickaxe
+    - minecraft:netherite_shovel
 Combat:
   DisplayName: "Combat"
   DisplayItem: minecraft:golden_sword
@@ -917,6 +1014,11 @@ Combat:
     - minecraft:turtle_helmet
     - minecraft:wooden_sword
     - minecraft:crossbow
+    - minecraft:netherite_boots
+    - minecraft:netherite_chestplate
+    - minecraft:netherite_helmet
+    - minecraft:netherite_leggings
+    - minecraft:netherite_sword
 Brewing:
   DisplayName: "Brewing"
   DisplayItem: minecraft:potion
@@ -965,4 +1067,3 @@ Books:
 # - minecraft:structure_block
 # - minecraft:structure_void
 # - minecraft:jigsaw
-# - minecraft:suspicious_stew

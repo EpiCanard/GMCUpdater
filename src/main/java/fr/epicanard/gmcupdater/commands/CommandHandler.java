@@ -15,14 +15,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_17_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.epicanard.gmcupdater.GMCUpdater;
 import fr.epicanard.gmcupdater.utils.ItemStackUtils;
-import net.minecraft.server.v1_14_R1.CreativeModeTab;
-import net.minecraft.server.v1_14_R1.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -121,7 +121,7 @@ public class CommandHandler implements CommandExecutor {
         if (a.getType() == CreativeModeTab.class) {
           CreativeModeTab ret = (CreativeModeTab) FieldUtils.readField(a, it, true);
           if (ret != null) {
-            return ret.c();
+            return ret.b();
           }
         }
       }

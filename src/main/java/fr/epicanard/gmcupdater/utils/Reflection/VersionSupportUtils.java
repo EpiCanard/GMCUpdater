@@ -1,5 +1,6 @@
 package fr.epicanard.gmcupdater.utils.Reflection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -11,7 +12,10 @@ public class VersionSupportUtils {
 
   enum Path {
     BUKKIT("org.bukkit.craftbukkit"),
-    MINECRAFT("net.minecraft.server");
+    MINECRAFT_SERVER("net.minecraft.server"),
+    MINECRAFT_RESOURCES("net.minecraft.resources"),
+    MINECRAFT_WORLD_ITEM("net.minecraft.world.item"),
+    MINECRAFT_CORE("net.minecraft.core");
 
     String path;
 
@@ -51,6 +55,10 @@ public class VersionSupportUtils {
    * @throws ClassNotFoundException
    */
   private Class<?> getClassFromPath(Path basePath, String path) throws ClassNotFoundException {
+    return Class.forName(String.format("%s.%s", basePath.path, path));
+  }
+
+  private Class<?> getClassFromPathWithVersion(Path basePath, String path) throws ClassNotFoundException {
     return Class.forName(String.format("%s.%s.%s", basePath.path, this.version, path));
   }
 
@@ -91,7 +99,7 @@ public class VersionSupportUtils {
 
   private Object newInstance(String path, Object ...args) {
     try {
-      return getClassFromPath(Path.MINECRAFT, path).getConstructor(fromObjectToClass(args)).newInstance(args);
+      return getClassFromPath(Path.MINECRAFT_SERVER, path).getConstructor(fromObjectToClass(args)).newInstance(args);
     } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
       e.printStackTrace();
     }
@@ -106,13 +114,10 @@ public class VersionSupportUtils {
    */
   private Object getRegistry() {
     try {
-      try {
-        Object registry = getClassFromPath(Path.MINECRAFT, "Item").getField("REGISTRY").get(null);
-        return registry;
-      } catch (NoSuchFieldException e) {
-        return getClassFromPath(Path.MINECRAFT, "IRegistry").getField("ITEM").get(null);
-      }
-    } catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {}
+        return getClassFromPath(Path.MINECRAFT_CORE, "IRegistry").getField("Z").get(null);
+    } catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+      System.out.println(e);
+    }
     return null;
   }
 
@@ -127,7 +132,7 @@ public class VersionSupportUtils {
    */
   public ItemStack getItemStack(String name) {
     try {
-      Class<?> minecraftKeyClass = getClassFromPath(Path.MINECRAFT, "MinecraftKey");
+      Class<?> minecraftKeyClass = getClassFromPath(Path.MINECRAFT_RESOURCES, "MinecraftKey");
       Object minecraftKey = minecraftKeyClass.getConstructor(String.class).newInstance(name);
 
       Object registry = getRegistry();
@@ -135,7 +140,7 @@ public class VersionSupportUtils {
       if (item == null)
         return null;
 
-      Method asNewCraftStack = getClassFromPath(Path.BUKKIT, "inventory.CraftItemStack").getMethod("asNewCraftStack", getClassFromPath(Path.MINECRAFT, "Item"));
+      Method asNewCraftStack = getClassFromPathWithVersion(Path.BUKKIT, "inventory.CraftItemStack").getMethod("asNewCraftStack", getClassFromPath(Path.MINECRAFT_WORLD_ITEM, "Item"));
       ItemStack itemStack = (ItemStack)asNewCraftStack.invoke(null, item);
 
       return itemStack;
@@ -157,19 +162,18 @@ public class VersionSupportUtils {
    */
   public String getMinecraftKey(ItemStack itemStack) {
     try {
-      Method asNMSCopy = getClassFromPath(Path.BUKKIT, "inventory.CraftItemStack").getDeclaredMethod("asNMSCopy", ItemStack.class);
+      Method asNMSCopy = getClassFromPathWithVersion(Path.BUKKIT, "inventory.CraftItemStack").getDeclaredMethod("asNMSCopy", ItemStack.class);
       Object nmsItemStack = asNMSCopy.invoke(null, itemStack);
 
       Object registry = getRegistry();
       Object minecraftKey;
       try {
-        minecraftKey = registry.getClass().getMethod("b", Object.class).invoke(registry, invokeMethod(nmsItemStack, "getItem"));
-      } catch(NoSuchMethodException e) {
         minecraftKey = registry.getClass().getMethod("getKey", Object.class).invoke(registry, invokeMethod(nmsItemStack, "getItem"));
+      } catch(NoSuchMethodException e) {
+        return null;
       }
 
-      return invokeMethod(minecraftKey, "b").toString() + ":" + invokeMethod(minecraftKey, "getKey").toString();
-
+      return invokeMethod(minecraftKey, "getNamespace").toString() + ":" + invokeMethod(minecraftKey, "getKey").toString();
     } catch(ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
       e.printStackTrace();
     }
@@ -189,16 +193,16 @@ public class VersionSupportUtils {
       VersionField activeContainerVF = VersionField.from(entityPlayer).get("activeContainer");
       Object windowId = activeContainerVF.get("windowId").value();
 
-      Class<?> iChat = getClassFromPath(Path.MINECRAFT, "IChatBaseComponent");
+      Class<?> iChat = getClassFromPath(Path.MINECRAFT_SERVER, "IChatBaseComponent");
 
-      Object packet = getClassFromPath(Path.MINECRAFT, "PacketPlayOutOpenWindow").getConstructor(Integer.TYPE, String.class, iChat, Integer.TYPE)
+      Object packet = getClassFromPath(Path.MINECRAFT_SERVER, "PacketPlayOutOpenWindow").getConstructor(Integer.TYPE, String.class, iChat, Integer.TYPE)
         .newInstance( windowId, "minecraft:chest", iChat.cast(chatMessage), player.getOpenInventory().getTopInventory().getSize());
 
 
       Object playerConnection = entityPlayer.getClass().getDeclaredField("playerConnection").get(entityPlayer);
 
-      playerConnection.getClass().getMethod("sendPacket", getClassFromPath(Path.MINECRAFT, "Packet")).invoke(playerConnection, packet);
-      entityPlayer.getClass().getMethod("updateInventory", getClassFromPath(Path.MINECRAFT, "Container")).invoke(entityPlayer, activeContainerVF.value());
+      playerConnection.getClass().getMethod("sendPacket", getClassFromPath(Path.MINECRAFT_SERVER, "Packet")).invoke(playerConnection, packet);
+      entityPlayer.getClass().getMethod("updateInventory", getClassFromPath(Path.MINECRAFT_SERVER, "Container")).invoke(entityPlayer, activeContainerVF.value());
 
     } catch(NoSuchFieldException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException  e) {
       e.printStackTrace();
