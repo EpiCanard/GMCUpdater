@@ -31,13 +31,4 @@ public final class ItemStackUtils {
     return item;
   }
 
-  /**
-   * Get minecraft key from item
-   *
-   * @param item ItemStack
-   * @return minecraft key in string
-   */
-  public static String getMinecraftKey(ItemStack item) {
-    return VersionSupportUtils.getInstance().getMinecraftKey(item);
-  }
 }

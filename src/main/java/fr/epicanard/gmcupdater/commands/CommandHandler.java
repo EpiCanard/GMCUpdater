@@ -1,7 +1,6 @@
 package fr.epicanard.gmcupdater.commands;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,20 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_17_R1.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.epicanard.gmcupdater.GMCUpdater;
 import fr.epicanard.gmcupdater.utils.ItemStackUtils;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -46,12 +41,11 @@ public class CommandHandler implements CommandExecutor {
     List<String> configItems = Arrays.asList(GMCUpdater.plugin.catHandler.getItems("!"));
     List<String> materialItems;
 
-    materialItems = Arrays.asList(Material.values()).stream().map(mat -> {
-      ItemStack item = new ItemStack(mat);
-      return ItemStackUtils.getMinecraftKey(item);
-    }).filter(mat -> {
-      return !mat.equals("minecraft:air");
-    }).collect(Collectors.toList());
+    materialItems = Arrays.stream(Material.values()).filter(Material::isItem).map(mat -> {
+      return mat.getKey().toString();
+    })
+            .filter(mat -> !mat.equals("minecraft:air"))
+            .collect(Collectors.toList());
 
     result.put("To delete", getToDelete(materialItems, configItems));
 
@@ -113,22 +107,6 @@ public class CommandHandler implements CommandExecutor {
   }
 
   private String getCategoryByMystery(Material item) {
-    Item it = CraftMagicNumbers.getItem(item);
-
-    try {
-      Field[] lst = FieldUtils.getAllFields(it.getClass());
-      for (Field a : lst) {
-        if (a.getType() == CreativeModeTab.class) {
-          CreativeModeTab ret = (CreativeModeTab) FieldUtils.readField(a, it, true);
-          if (ret != null) {
-            return ret.b();
-          }
-        }
-      }
-    } catch (IllegalArgumentException | IllegalAccessException e) {
-      System.out.println("Vilain !");
-    }
-    return null;
+    return item.getCreativeCategory().name();
   }
-
 }
